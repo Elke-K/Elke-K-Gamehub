@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/js/games.js" defer></script>
+</head>
+
+<body class="games-body min-h-screen <%= themaName === 'light' ? 'theme-light' : 'theme-dark' %>">
+  <header class="games-header">
+    <div class="flex flex-col items-center gap-6 lg:grid lg:grid-cols-[10%_80%_10%] lg:items-center lg:gap-0">
+      <a href="/home" class="animate-fade-in stagger-1">
+        <div id="logo" class="text-emerald-400 text-xl md:text-2xl font-bold tracking-wide px-3 py-1.5 rounded-lg transition-all duration-300 hover:text-emerald-300 hover:bg-emerald-950/50 hover:scale-110 hover:shadow-lg hover:shadow-emerald-500/50 hover:-rotate-2">
+          [+..••]
+        </div>
+      </a>
+
+      <%- include('partials/navbar') %>
+
+      <%- include('partials/header-user') %>
+    </div>
+  </header>
+
+  <main class="games-page animate-fade-in stagger-4">
+    <section class="games-hero">
+      <div class="games-hero-content">
+        <p class="games-kicker mb-3">Game Hub</p>
+        <h2 id="txtOfPage" class="games-title font-extrabold mb-3">
+          Alle games
+        </h2>
+        <p class="games-subtitle">
+          Ontdek nieuwe favorieten, filter razendsnel en zweef over elke kaart voor een cinematic vibe.
+        </p>
+      </div>
+
+      <form class="games-toolbar" method="get">
+        <div class="games-toolbar-row">
+          <div class="games-search">
+            <input id="search_input" name="searchGame" value="<%= searchGame%>" type="text" placeholder="Zoek voor games..." class="games-input text-sm sm:text-base" autocomplete="off" list="games_suggestions" />
+            <datalist id="games_suggestions"></datalist>
+            <button id="clear_btn" type="button" name="clearField" value="clicked" class="games-clear absolute right-3 top-1/2 -translate-y-1/2 text-sm sm:text-base <%= searchGame ? '' : 'hidden' %>">
+              ✕
+            </button> 
+          </div>
+
+          <div class="games-toolbar-actions">
+            <button type="button" id="btn_filter_container" class="games-btn games-btn-ghost px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2l-7 7v5l-4 2v-7L3 6V4z" />
+              </svg>
+            </button>
+
+            <button class="games-btn games-btn-primary px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base" name="search" value="clicked" type="submit">
+              Search
+            </button>
+          </div>
+        </div>
+
+        <div id="filter_container" class="games-filter-panel hidden opacity-0 scale-95 -translate-y-2 transition-all duration-300 ease-in-out z-50">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="games-filter-title text-cente  r">Filteropties</h3>
+            <button type="button" id="filter_close" class="games-btn games-btn-ghost px-3 py-1.5 text-xs sm:text-sm">Sluiten</button>
+          </div>
+
+          <label class="games-filter-item text-sm" for="Rating_count">
+            <span>Aantal beoordelingen</span>
+            <input type="checkbox" name="sortfield" value="ratingCount" <%= sortfield === "ratingCount" ? "checked" : "" %> id="Rating_count" class="w-3.5 h-3.5 accent-emerald-500 cursor-pointer" />
+          </label>
+
+          <label class="games-filter-item text-sm" for="Alfabetisch_A_Z">
+            <span>Naam alfabetisch (A-Z)</span>
+            <input type="checkbox" name="sortfield" value="Name_alphabetically_A_Z" <%= sortfield === "Name_alphabetically_A_Z" ? "checked" : "" %> id="Alfabetisch_A_Z" class="w-3.5 h-3.5 accent-emerald-500 cursor-pointer" />
+          </label>
+
+          <label class="games-filter-item text-sm" for="Alfabetisch_Z_A">
+            <span>Naam alfabetisch (Z-A)</span>
+            <input type="checkbox" name="sortfield" value="Name_alphabetically_Z_A" <%= sortfield === "Name_alphabetically_Z_A" ? "checked" : "" %> id="Alfabetisch_Z_A" class="w-3.5 h-3.5 accent-emerald-500 cursor-pointer" />
+          </label>
+
+          <label class="games-filter-item text-sm" for="Rating_asc">
+            <span>Beoordeling (oplopend)</span>
+            <input type="checkbox" name="sortfield" value="ratingAsc" <%= sortfield === "ratingAsc" ? "checked" : "" %> id="Rating_asc" class="w-3.5 h-3.5 accent-emerald-500 cursor-pointer" />
+          </label>
+
+          <label class="games-filter-item text-sm" for="Rating_desc">
+            <span>Beoordeling (aflopend)</span>
+            <input type="checkbox" name="sortfield" value="ratingDesc" <%= sortfield === "ratingDesc" ? "checked" : "" %> id="Rating_desc" class="w-3.5 h-3.5 accent-emerald-500 cursor-pointer" />
+          </label>
+
+          <label class="games-filter-item text-sm" for="Release_Year_asc">
+            <span>Uitgebracht jaar (oplopend)</span>
+            <input type="checkbox" name="sortfield" value="releaseYearAsc" <%= sortfield === "releaseYearAsc" ? "checked" : "" %> id="Release_Year_asc" class="w-3.5 h-3.5 accent-emerald-500 cursor-pointer" />
+          </label>
+
+          <label class="games-filter-item text-sm" for="Release_Year_desc">
+            <span>Uitgebracht jaar (aflopend)</span>
+            <input type="checkbox" name="sortfield" value="releaseYearDesc" <%= sortfield === "releaseYearDesc" ? "checked" : "" %> id="Release_Year_desc" class="w-3.5 h-3.5 accent-emerald-500 cursor-pointer" />
+          </label>
+
+          <label class="games-filter-item text-sm" for="singleplayer">
+            <span>Een speler</span>
+            <input type="checkbox" name="sortfield" value="singlePlayer" <%= sortfield === "singlePlayer" ? "checked" : "" %> id="singleplayer" class="w-3.5 h-3.5 accent-emerald-500 cursor-pointer" />
+          </label>
+
+          <label class="games-filter-item text-sm" for="multiplayer">
+            <span>Meerdere spelers</span>
+            <input type="checkbox" name="sortfield" value="multiplayer" <%= sortfield === "multiplayer" ? "checked" : "" %> id="multiplayer" class="w-3.5 h-3.5 accent-emerald-500 cursor-pointer" />
+          </label>
+        </div>
+      </form>
+    </section>
+
+    <section id="section_all_games" class="relative">
+  <!-- Plain buttons, no form -->
+  <button id="btn_left" aria-label="Previous games" class="games-nav-btn games-nav-btn-left <%= searchActive ? 'hidden' : '' %>">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+    </svg>
+  </button>
+
+  <button id="btn_right" aria-label="Next games" class="games-nav-btn games-nav-btn-right <%= searchActive ? 'hidden' : '' %>">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+    </svg>
+  </button>
+      <div id="div_all_games" class="games-panel">
+        <div class="games-grid" id="games_container">
+          <!--all games-->
+
+          <% showAllGames.forEach((showAllGame, index) => { %>
+
+          <div class="game-card animate-fade-in <%= 'stagger-' + Math.min(index + 1, 8) %> relative w-full aspect-square">
+            <div class="absolute inset-0">
+              <img class="w-full h-full object-cover" alt="<%= showAllGame.name%>" src="<%= showAllGame.background_image && showAllGame.background_image !== 'null' && showAllGame.background_image !== 'undefined' ? showAllGame.background_image : '/images/sword.png' %>" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/images/sword.png';">
+            </div>
+            <a class="absolute inset-0 z-10" href="/game-info/<%= showAllGame.id %>" target="_self" aria-label="Ga naar <%= showAllGame.name%>">
+              <p class="game-card-title absolute inset-x-0 bottom-0 p-4 text-center text-white font-bold text-base drop-shadow"><%= showAllGame.name%></p>
+            </a>
+          </div>
+
+          <% }) %>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Collection Modal -->
+  <div id="addToCollectionMenu" style="
+          display: none;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: rgba(15, 23, 42, 0.95);
+          padding: 2rem;
+          border-radius: 1rem;
+          border: 2px solid #10b981;
+          z-index: 1000;
+          min-width: 300px;
+          max-width: 500px;
+          width: 90vw;
+          max-height: 90vh;
+          overflow-y: auto;
+          backdrop-filter: blur(10px);
+        ">
+    <button id="delete_collection_btn" style="
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #f87171;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+          ">
+      &times;
+    </button>
+
+    <h3 style="
+            color: #10b981;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+          ">
+      Add to Collection
+    </h3>
+
+    <div id="allCollectionsNames" style="margin-bottom: 1rem"></div>
+
+    <button id="create_collection_btn" style="
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #10b981;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 0.5rem;
+          ">
+      + Nieuwe collectie maken
+    </button>
+
+    <div id="collection_filed" style="display: none; margin-top: 1rem; animation-fill-mode: forwards">
+      <input type="text" id="collection_name" placeholder="Collectie naam..." style="
+              width: 100%;
+              padding: 0.75rem;
+              background-color: #1e293b;
+              color: white;
+              border: 1px solid #10b981;
+              border-radius: 0.5rem;
+              margin-bottom: 0.5rem;
+            " />
+      <button id="add_collection_btn" type="button" style="
+              width: 100%;
+              padding: 0.75rem;
+              background-color: #059669;
+              color: white;
+              border: none;
+              border-radius: 0.5rem;
+              cursor: pointer;
+              font-weight: 600;
+              transition: all 0.3s;
+            ">
+        Aanmaken en spel toevoegen
+      </button>
+    </div>
+  </div>
+  <!--Notification-->
+  <div id="notification" role="alert" class="fixed bottom-5 left-1/2 -translate-x-1/2 w-[90%] max-w-80 hidden bg-zinc-900 text-white px-4 py-3 rounded-lg shadow-lg shadow-black/40 transition-all duration-300 ease-out opacity-0 translate-y-4 z-[9999]">
+    <p id="error_text" class="text-white text-center text-sm sm:text-base"></p>
+  </div>
+  <!-- Modal backdrop -->
+  <div id="modal_backdrop" style="
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.7);
+          z-index: 999;
+        "></div>
+</body>
+
+</html>

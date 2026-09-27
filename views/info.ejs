@@ -1,0 +1,159 @@
+<%- include('partials/header') %>
+<main class="animate-fade-in stagger-4">
+      <div class="hidden" id="forgot_password_old_password">
+        <form
+          action=""
+          method="post"
+          class="flex flex-col items-center justify-center min-h-[calc(120dvh-350px)] lg:min-h-[calc(100dvh-90px)] gap-3"
+          id="forgot_password_old"
+        >
+          <label for="old_password" class="text-2xl font-bold"
+            >Old password:
+          </label>
+          <input
+            type="password"
+            name="old_password"
+            id="old_password"
+            class="py-1 px-1 w-64 h-8 rounded-lg text-zinc-900 text-sm border-[3px] border-emerald-400 hover:border-emerald-500 transition-all duration-500"
+            required
+          />
+
+          <label for="new_password" class="text-2xl font-bold mt-2"
+            >New password:
+          </label>
+          <input
+            type="password"
+            name="new_password"
+            id="new_password"
+            class="py-1 px-1 w-64 h-8 rounded-lg text-zinc-900 text-sm border-[3px] border-emerald-400 hover:border-emerald-500 transition-all duration-500"
+            required
+          />
+          <label for="verify_new_password" class="text-2xl font-bold mt-2"
+            >Verify new password:
+          </label>
+          <input
+            type="password"
+            name="verify_new_password"
+            id="verify_new_password"
+            class="py-1 px-1 w-64 h-8 rounded-lg text-zinc-900 text-sm border-[3px] border-emerald-400 hover:border-emerald-500 transition-all duration-500"
+            required
+          />
+          <div>
+            <label for="show_password">Show passwords?</label>
+            <input type="checkbox" class="ml-1.5" id="show_password" />
+          </div>
+          <a href="/reset-password" class="underline mb-2">Forgot old password?</a>
+
+          <input
+            type="submit"
+            name="update_password"
+            value="Update password"
+            class="text-1xl font-bold bg-emerald-400 px-16 border py-1.5 rounded-lg text-zinc-900 hover:bg-emerald-500 transition-all duration-500 hover:scale-[1.05]"
+          />
+        </form>
+      </div>
+      <div class="hidden" id="forgot_password_email">
+        <form
+          action=""
+          method="post"
+          class="flex flex-col items-center justify-center min-h-[calc(120dvh-350px)] lg:min-h-[calc(100dvh-90px)] gap-3"
+          id="forgot_password_new"
+        >
+          <label for="new_password_verify" class="text-2xl font-bold mt-2"
+            >New password:
+          </label>
+          <input
+            type="password"
+            name="new_password_verify"
+            id="new_password_verify"
+            class="py-1 px-1 w-64 h-8 rounded-lg text-zinc-900 text-sm border-[3px] border-emerald-400 hover:border-emerald-500 transition-all duration-500"
+            required
+          />
+          <label for="new_password_verify2" class="text-2xl font-bold mt-2"
+            >Verify new password:
+          </label>
+          <input
+            type="password"
+            name="new_password_verify2"
+            id="new_password_verify2"
+            class="py-1 px-1 w-64 h-8 rounded-lg text-zinc-900 text-sm border-[3px] border-emerald-400 hover:border-emerald-500 transition-all duration-500"
+            required
+          />
+          <div>
+            <label for="show_password">Show passwords?</label>
+            <input type="checkbox" class="mb-6 ml-1.5" id="show_password2" />
+          </div>
+          <input
+            type="submit"
+            name="update_password"
+            value="Update password"
+            class="text-1xl font-bold bg-emerald-400 px-16 border py-1.5 rounded-lg text-zinc-900 hover:bg-emerald-500 transition-all duration-500 hover:scale-[1.05]"
+          />
+        </form>
+      </div>
+      <div class="hidden" id="forgot_password_email_notification">
+        <form
+          id="reset_form"
+          class="flex flex-col items-center justify-center min-h-[calc(120dvh-350px)] lg:min-h-[calc(100dvh-90px)] gap-10"
+        >
+          <p class="text-1xl font-bold text-wrap max-w-56 text-center">
+            To reset your password, please enter the email of the account you're
+            trying to retrieve.
+          </p>
+
+          <div class="flex flex-col gap-7 items-center">
+            <label for="user_email" class="text-2xl font-bold">Email: </label>
+            <input
+              type="email"
+              name="user_email"
+              id="email"
+              class="py-1 px-1 w-64 h-8 rounded-lg text-zinc-900 text-sm border-[3px] border-emerald-400 hover:border-emerald-500 transition-all duration-500"
+              required
+            />
+            <label for="send_code" class="hidden"></label>
+            <input type="text" name="send_code" id="send_code" class="hidden" />
+
+            <label for="send_email"></label>
+            <input
+              id="submit_email"
+              type="submit"
+              name="send_email"
+              value="Send email"
+              class="text-1xl font-bold bg-emerald-400 px-16 border py-1.5 rounded-lg text-zinc-900 hover:bg-emerald-500 transition-all duration-500 hover:scale-[1.05]"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="hidden" id="error"></div>
+      <div class="hidden" id="verification_code">
+        <form
+          id="form_check_code"
+          action=""
+          method="post"
+          class="flex flex-col items-center justify-center min-h-[calc(120dvh-350px)] lg:min-h-[calc(100dvh-90px)] gap-10"
+        >
+          <div class="flex flex-col gap-7 items-center">
+            <label for="verification_code_input" class="text-2xl font-bold"
+              >Enter the given verification code from your email:
+            </label>
+            <input
+              id="verification_code_input"
+              type="text"
+              name="verification_code_input"
+              class="py-1 px-1 w-64 h-8 rounded-lg text-zinc-900 text-sm border-[3px] border-emerald-400 hover:border-emerald-500 transition-all duration-500"
+              required
+            />
+
+            <input
+              id="check_verification_code"
+              type="submit"
+              name="check_verification_code"
+              value="Verify code"
+              class="text-1xl font-bold bg-emerald-400 px-16 border py-1.5 rounded-lg text-zinc-900 hover:bg-emerald-500 transition-all duration-500 hover:scale-[1.05]"
+            />
+          </div>
+        </form>
+      </div>
+    </main>
+
+<%- include('partials/footer') %>

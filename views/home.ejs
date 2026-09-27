@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/js/home.js" defer></script>
+</head>
+
+<body class="games-body min-h-screen <%= themaName === 'light' ? 'theme-light' : 'theme-dark' %>">
+  <header class="games-header">
+      <div class="flex flex-col items-center gap-6 lg:grid lg:grid-cols-[10%_80%_10%] lg:items-center lg:gap-0">
+        <a href="/home" class="animate-fade-in stagger-1">
+          <div id="logo" class="text-emerald-400 text-xl md:text-2xl font-bold tracking-wide px-3 py-1.5 rounded-lg transition-all duration-300 hover:text-emerald-300 hover:bg-emerald-950/50 hover:scale-110 hover:shadow-lg hover:shadow-emerald-500/50 hover:-rotate-2">
+            [+..••]
+          </div>
+        </a>
+
+        <%- include('partials/navbar') %>
+
+        <%- include('partials/header-user') %>
+      </div>
+    </header>
+
+      <!--Main-->
+      <main class="games-page animate-fade-in stagger-4">
+        <!--Sectios-->
+
+        <!--Popular section-->
+        <section
+          id="section_popular"
+          class="-z-10"
+        >
+          <h2
+            class="games-title text-2xl sm:text-3xl md:text-4xl font-extrabold text-center mb-6"
+          >
+            Populaire games
+          </h2>
+          <div
+            id="div_popular_games"
+            class="games-panel"
+          >
+            <div
+              id="popular_games"
+              class="games-grid"
+            >
+
+            <%for(let mostPopulareGame of mostPopulareGames){%>
+
+                <div class="game-card relative w-full aspect-square">
+                  <div class="absolute inset-0">
+                    <img class="w-full h-full object-cover" alt="<%= mostPopulareGame.name%>" src="<%= mostPopulareGame.background_image && mostPopulareGame.background_image !== 'null' && mostPopulareGame.background_image !== 'undefined' ? mostPopulareGame.background_image : '/images/sword.png' %>" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/images/sword.png';">    
+                    </div>
+                  <a class="absolute inset-0 z-10" href="/game-info/<%= mostPopulareGame.id%>" target="_self" aria-label="Ga naar <%= mostPopulareGame.name%>"><p class="game-card-title absolute inset-x-0 bottom-0 p-4 text-center text-white font-bold text-base drop-shadow"><%= mostPopulareGame.name%></p></a>
+                </div>
+
+                <%}%>
+        
+        </div>
+          </div>
+        </section>
+
+        <!--Recent section-->
+        <section
+          id="section_recent"
+          class=""
+        >
+          <h2
+            class="games-title text-2xl sm:text-3xl md:text-4xl font-extrabold text-center mb-6"
+          >
+            Recent uitgekomen games
+          </h2>
+          <div
+            id="div_recent_games"
+            class="games-panel"
+          >
+            <div
+              id="recent_games"
+              class="games-grid"
+            >
+              <%for(let allrecentGame of allrecentGames){%>
+
+                <div class="game-card relative w-full aspect-square">
+                  <div class="absolute inset-0">
+                    <img class="w-full h-full object-cover" alt="<%= allrecentGame.name%>" src="<%= allrecentGame.background_image && allrecentGame.background_image !== 'null' && allrecentGame.background_image !== 'undefined' ? allrecentGame.background_image : '/images/sword.png' %>" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/images/sword.png';">    
+                    </div>
+                  <a class="absolute inset-0 z-10" href="/game-info/<%= allrecentGame.id%>" target="_self" aria-label="Ga naar <%= allrecentGame.name%>"><p class="game-card-title absolute inset-x-0 bottom-0 p-4 text-center text-white font-bold text-base drop-shadow"><%= allrecentGame.name%></p></a>
+                </div>
+
+                <%}%>
+            </div>
+          </div>
+        </section>
+
+       <!--More section...-->
+<section id="section_more" class="relative">
+
+  <!-- Plain buttons, no form -->
+  <button
+    id="btn_left"
+    aria-label="Previous games"
+    class="games-nav-btn games-nav-btn-left"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+    </svg>
+  </button>
+
+  <button
+    id="btn_right"
+    aria-label="Next games"
+    class="games-nav-btn games-nav-btn-right"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
+    </svg>
+  </button>
+
+  <h2 class="games-title text-2xl sm:text-3xl md:text-4xl font-extrabold text-center mb-6">
+    Meerdere games
+  </h2>
+
+  <div id="div_all_games" class="games-panel">
+    <div class="games-grid" id="games_container">
+      <%for(let showAllGame of showAllGames){%>
+        <div class="game-card relative w-full aspect-square">
+          <div class="absolute inset-0">
+            <img class="w-full h-full object-cover" alt="<%= showAllGame.name%>" src="<%= showAllGame.background_image && showAllGame.background_image !== 'null' && showAllGame.background_image !== 'undefined' ? showAllGame.background_image : '/images/sword.png' %>" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/images/sword.png';">
+          </div>
+          <a class="absolute inset-0 z-10" href="/game-info/<%= showAllGame.id%>" target="_self" aria-label="Ga naar <%= showAllGame.name%>">
+            <p class="game-card-title absolute inset-x-0 bottom-0 p-4 text-center text-white font-bold text-base drop-shadow"><%= showAllGame.name%></p>
+          </a>
+        </div>
+      <%}%>
+    </div>
+  </div>
+</section>
+
+        <div class="hidden fixed inset-x-0 top-24 mx-auto max-w-md w-[92vw] rounded-2xl border border-emerald-500 bg-slate-950 p-5 shadow-2xl z-50" id="addToCollectionMenu">
+          <button id="create_collection_btn" class="absolute top-3 right-3 w-9 h-9 rounded-full border border-white/40 text-white">
+            +
+          </button>
+          <button id="delete_collection_btn" class="absolute top-3 right-14 w-9 h-9 rounded-full border border-white/40 text-white">
+            x
+          </button>
+          <div class="hidden mt-12 flex-col gap-3" id="collection_filed">
+            <label for="collection_name">Add The Collection Name</label>
+            <input class="rounded-lg border border-emerald-500 bg-slate-800 p-2 text-white" type="text" name="collection_name" id="collection_name" />
+            <button class="rounded-lg bg-emerald-600 px-3 py-2 font-semibold" type="button" id="add_collection_btn">Add</button>
+          </div>
+        </div>
+      </main>
+<%- include('partials/footer') %>

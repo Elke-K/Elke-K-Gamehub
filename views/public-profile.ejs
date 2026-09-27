@@ -1,0 +1,128 @@
+<%- include('partials/header') %>
+<script src="/js/profile.js" defer></script>
+
+<main class="animate-fade-in stagger-4 profile-page public-profile-page">
+  <div class="max-w-7xl mx-auto px-4 py-6 lg:py-8 profile-shell">
+
+    <% if (publicProfile) { %>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 profile-grid">
+        <!-- Left Column - Profile Info (Read-only) -->
+        <div class="lg:col-span-2 space-y-6 order-2 lg:order-none">
+          <!-- Profile Header Card -->
+          <div
+            class="profile-card <%= themaName === 'light' ? 'bg-white border-emerald-200' : 'bg-zinc-900 border-emerald-500' %> border-2 rounded-2xl p-6 shadow-xl"
+          >
+            <div class="flex flex-col items-center">
+              <div class="relative mb-4">
+                <div
+                  class="profile-avatar w-24 h-24 bg-linear-to-br from-emerald-400 to-emerald-600 p-1 rounded-full shadow-lg shadow-emerald-500/30 overflow-hidden"
+                >
+<% const publicProfileImage = imageSrc && imageSrc.trim() !== "" ? imageSrc : "/images/user.png"; %>
+                  <img
+                    src="<%=publicProfileImage%>"
+                    alt="gebruikers profiel foto"
+                    id="profile_pic"
+                    class="block w-full h-full rounded-full object-cover object-center bg-zinc-800"
+                  />
+                </div>
+                <div
+                  class="absolute -bottom-1 -right-1 bg-emerald-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg"
+                  id="level"
+                >
+                  Lvl <%=lvl%>
+                </div>
+              </div>
+              <h2 id="user-username" class="text-2xl font-bold mb-4"><%=username%></h2>
+            </div>
+          </div>
+
+          <div
+            class="profile-card <%= themaName === 'light' ? 'bg-white border-slate-200' : 'bg-zinc-900 border-zinc-800' %> border-2 rounded-2xl p-6 shadow-xl space-y-6"
+          >
+            <h3 class="text-xl font-bold text-emerald-400 mb-4">
+              Profiel informatie
+            </h3>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold <%= themaName === 'light' ? 'text-slate-600' : 'text-zinc-300' %>"
+                >Over mij</label
+              >
+              <div
+                id="about"
+                class="w-full px-4 py-3 rounded-lg text-sm border-2 min-h-[140px] <%= themaName === 'light' ? 'bg-white text-slate-900 border-slate-300' : 'bg-zinc-800 text-white border-zinc-700' %>"
+              >
+                <%=aboutMe%>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-sm font-semibold <%= themaName === 'light' ? 'text-slate-600' : 'text-zinc-300' %>"
+                >Gebruikersnaam</label
+              >
+              <div
+                id="username"
+                class="w-full px-4 py-3 rounded-lg text-sm border-2 <%= themaName === 'light' ? 'bg-white text-slate-900 border-slate-300' : 'bg-zinc-800 text-white border-zinc-700' %>"
+              >
+                <%=username%>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Collections (Read-only) -->
+        <div class="lg:col-span-1 flex flex-col gap-3 order-1 lg:order-none">
+          <h2
+            id="collections_section_title"
+            class="text-2xl md:text-3xl font-bold text-emerald-400 mb-2"
+          >
+            Collecties
+          </h2>
+          <div id="collectioncontainer" class="profile-collections flex flex-col gap-4 p-4 rounded-2xl shadow-xl w-full max-h-80 overflow-y-auto">
+            <% if (collections && collections.length > 0) { %>
+              <% collections.forEach(collection => { %>
+                <div class="collection relative flex items-center justify-between gap-3 px-4 py-3 border-2 rounded-xl shadow-md hover:shadow-emerald-500/30 hover:scale-[1.02] transition-all duration-300 min-w-[220px]">
+                  <button
+                    class="btn_collection text-emerald-400 font-semibold tracking-wide text-sm uppercase hover:text-emerald-300 transition-colors duration-200"
+                    data-games="<%= encodeURIComponent(JSON.stringify(collection.allGames)) %>"
+                  >
+                    <%= collection.collectionName %>
+                  </button>
+                  <p class="text-xs text-zinc-400 font-medium">
+                    <%= collection.allGames.length %> <%= collection.allGames.length === 1 ? "game" : "games" %>
+                  </p>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p>Geen collecties gevonden.</p>
+            <% } %>
+          </div>
+        </div>
+        <div id="GamesOfCollection_profile">
+          <div id="allGamesOfCollection_profile"></div>
+        </div>
+      </div>
+
+    <% } else { %>
+      <p class="text-center text-emerald-400 text-xl mt-20">
+        Deze gebruiker heeft een verborgen profiel.
+      </p>
+    <% } %>
+
+  </div>
+</main>
+
+<div id="collection_modal_backdrop" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+  <div id="collection_modal" class="<%= themaName === 'light' ? 'bg-white border-slate-300' : 'bg-zinc-900 border-zinc-700' %> w-full max-w-lg md:max-w-xl rounded-3xl border-2 shadow-2xl overflow-hidden">
+    <div class="flex items-center justify-between border-b <%= themaName === 'light' ? 'border-slate-200' : 'border-zinc-700' %> px-6 py-4">
+      <h3 class="text-xl font-bold text-emerald-400">
+        Collectie
+      </h3>
+      <button id="btn_close_modal" class="btn_modal_close flex items-center justify-center w-8 h-8 rounded-full bg-zinc-700 text-red-400 text-lg font-bold hover:bg-red-500 hover:text-white transition-all duration-200 shadow-sm">
+        ✕
+      </button>
+    </div>
+    <div class="p-6 flex flex-wrap gap-4" id="modal_body"></div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

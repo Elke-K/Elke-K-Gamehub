@@ -1,0 +1,87 @@
+<%- include('partials/header') %>
+
+<main class="community-page animate-fade-in stagger-4">
+  <section class="community-hero">
+    <div class="community-hero-content">
+      <p class="games-kicker mb-3">Game Hub</p>
+      <h1 class="community-title font-extrabold mb-3">Community</h1>
+      <p class="community-subtitle">
+        Ontdek publieke profielen, bekijk wat anderen spelen en zoek direct naar spelers die je wilt volgen.
+      </p>
+    </div>
+
+    <form class="community-toolbar" method="get">
+      <div class="community-search-row">
+        <div class="community-search">
+          <input
+            id="search"
+            name="search"
+            value="<%= searchTerm %>"
+            type="text"
+            placeholder="Zoek gebruikers..."
+            class="community-input text-sm sm:text-base"
+          />
+          <% if (searchTerm) { %>
+            <a href="/community" class="community-clear" aria-label="Wis zoekopdracht">✕</a>
+          <% } %>
+        </div>
+
+        <div class="community-toolbar-actions">
+          <button class="games-btn games-btn-primary px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base" type="submit">
+            Search
+          </button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <section class="community-stats">
+    <div class="community-stat-card">
+      <span class="community-stat-label">Publieke profielen</span>
+      <span class="community-stat-value"><%= totalPublicUsers %></span>
+    </div>
+    <div class="community-stat-card">
+      <span class="community-stat-label">Resultaten</span>
+      <span class="community-stat-value"><%= publicUsers.length %></span>
+    </div>
+  </section>
+
+  <section class="community-grid-wrap">
+    <% if (publicUsers.length > 0) { %>
+      <div class="community-grid">
+        <% publicUsers.forEach((user, index) => { %>
+          <% const userImage = user.profile_picture && user.profile_picture.trim() !== "" ? user.profile_picture : "/images/user.png"; %>
+          <a
+            href="/public-profile/<%= user.username %>"
+            class="community-card animate-fade-in <%= 'stagger-' + Math.min(index + 1, 8) %>"
+            aria-label="Ga naar profiel van <%= user.username %>"
+          >
+            <div class="community-card-top">
+              <div class="community-avatar">
+                <img src="<%= userImage %>" alt="<%= user.username %>" loading="lazy" decoding="async" />
+              </div>
+              <div class="community-card-heading">
+                <h2><%= user.username %></h2>
+                <p>Lvl <%= user.level %></p>
+              </div>
+            </div>
+
+            <p class="community-about"><%= user.about_me || 'Geen beschrijving toegevoegd.' %></p>
+
+            <div class="community-badges">
+              <span class="community-badge">Publiek profiel</span>
+              <span class="community-badge"><%= user.collection_more.length %> collecties</span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="community-empty">
+        <h2>Geen publieke profielen gevonden.</h2>
+        <p>Probeer een andere zoekterm of laat je eigen profiel publiek zien om hier zichtbaar te worden.</p>
+      </div>
+    <% } %>
+  </section>
+</main>
+
+<%- include('partials/footer') %>

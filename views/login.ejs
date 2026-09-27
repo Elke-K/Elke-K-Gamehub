@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/js/home.js" defer></script>
+</head>
+
+<body class="games-body min-h-screen <%= themaName === 'light' ? 'theme-light' : 'theme-dark' %>">
+  <header class="games-header">
+      <div class="flex flex-col items-center gap-6 lg:grid lg:grid-cols-[10%_80%_10%] lg:items-center lg:gap-0">
+        <a href="/home" class="animate-fade-in stagger-1">
+          <div id="logo" class="text-emerald-400 text-xl md:text-2xl font-bold tracking-wide px-3 py-1.5 rounded-lg transition-all duration-300 hover:text-emerald-300 hover:bg-emerald-950/50 hover:scale-110 hover:shadow-lg hover:shadow-emerald-500/50 hover:-rotate-2">
+            [+..••]
+          </div>
+        </a>
+
+        <%- include('partials/navbar') %>
+
+        <%- include('partials/header-user') %>
+      </div>
+    </header>
+<main class="animate-fade-in stagger-4">
+      <form id="login_form" action="" method="post"
+        class="flex flex-col items-center justify-center min-h-[calc(120dvh-350px)] lg:min-h-[calc(100dvh-90px)] gap-3">
+        <label for="email_username" class="text-2xl font-bold">E-mail/Gebruikersnaam</label>
+        <input type="text" name="email_username" id="email_username"
+          class="py-1 px-1 w-64 h-8 rounded-lg text-zinc-900 text-sm border-[3px] border-emerald-400 hover:border-emerald-500 transition-all duration-500" required />
+        <label for="password" class="text-2xl font-bold mt-6">Wachtwoord</label>
+        <input type="password" name="password" id="password"
+          class="py-1 px-1 w-64 h-8 rounded-lg text-zinc-900 text-sm border-[3px] border-emerald-400 hover:border-emerald-500 transition-all duration-500" required />
+        <div>
+          <label for="show_password">Wachtwoord tonen?</label>
+          <input type="checkbox" class="mb-6 ml-1.5" id="show_password" />
+        </div>
+        <input type="submit" name="login" value="Inloggen"
+          class="text-1xl font-bold bg-emerald-400 px-16 border py-1.5 rounded-lg text-zinc-900 hover:bg-emerald-500 transition-all duration-500 hover:scale-[1.05]" />
+        <div class="flex flex-col items-center gap-0 mt-3">
+          <a href="/register">Nog geen account? <span class="underline">Registreer je</span></a>
+          <a href="/reset-password" class="underline">Wachtwoord vergeten?</a>
+        </div>
+        <!-- Hidden location fields -->
+        <label for="email_username1" id="lblemail_username1" class="hidden">E-mail/Gebruikersnaam:</label>
+        <input type="text" name="email_username1" id="email_username1" class="hidden" />
+        <label id="lblcityName" class="hidden" for="cityName">Stad:</label>
+        <input type="text" class="hidden" name="cityName" id="cityName" />
+        <label id="lblcountryName" class="hidden" for="countryName">Land:</label>
+        <input type="text" class="hidden" name="countryName" id="countryName" />
+      </form>
+</main>
+
+    <!-- Notification -->
+
+    <% if (notification != "") { %>
+        <div id="notification_active" class="hidden"><%=notification%></div>
+    <% } %>
+
+    <div id="notification" role="alert"
+      class="fixed bottom-5 left-1/2 -translate-x-1/2 w-[90%] max-w-80 hidden bg-zinc-900 text-white px-4 py-3 rounded-lg shadow-lg shadow-black/40 transition-all duration-300 ease-out opacity-0 translate-y-4 z-[9999]">
+      <p id="error_text" class="text-white text-center text-sm sm:text-base"></p>
+    </div>
+
+    <script src="/js/methods.js"></script>
+    <script src="/js/login.js"></script>
+<%- include('partials/footer') %>

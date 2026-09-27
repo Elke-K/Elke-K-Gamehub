@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/js/game-info.js" defer></script>
+
+
+</head>
+
+<body class="games-body min-h-screen <%= themaName === 'light' ? 'theme-light' : 'theme-dark' %>">
+  <header class="games-header">
+    <div class="flex flex-col items-center gap-6 lg:grid lg:grid-cols-[10%_80%_10%] lg:items-center lg:gap-0">
+      <a href="/home" class="animate-fade-in stagger-1">
+        <div id="logo" class="text-emerald-400 text-xl md:text-2xl font-bold tracking-wide px-3 py-1.5 rounded-lg transition-all duration-300 hover:text-emerald-300 hover:bg-emerald-950/50 hover:scale-110 hover:shadow-lg hover:shadow-emerald-500/50 hover:-rotate-2">
+          [+..••]
+        </div>
+      </a>
+
+      <%- include('partials/navbar') %>
+
+      <%- include('partials/header-user') %>
+    </div>
+  </header>
+
+  <main class="animate-fade-in stagger-4 min-h-[calc(100vh-120px)] px-4 sm:px-6 lg:px-8 py-8 md:py-12 flex flex-col items-center">
+    <button id="scroll_to_reviews_btn" class="fixed top-28 right-6 z-[100] w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 shadow-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-white border-4 border-white/40 hover:border-white/60" title="Scroll naar reviews">
+      <svg class="w-8 h-8 sm:w-9 sm:h-9 motion-rise" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </button>
+
+    <div class="w-full max-w-6xl mx-auto flex flex-col gap-8">
+      <!-- Game Title -->
+      <div class="flex justify-center">
+        <div id="game_name" class="bg-gradient-to-r from-emerald-600/90 to-emerald-700/90 backdrop-blur-sm text-white font-bold text-2xl sm:text-3xl md:text-4xl px-8 py-5 rounded-2xl shadow-2xl shadow-emerald-900/50 text-center"><%=game.name %></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-6 items-start">
+        <div class="overflow-hidden rounded-3xl h-auto shadow-2xl shadow-emerald-900/40 border-4 border-emerald-600/30 bg-emerald-950/20 relative">
+          <img id="img_info_game" class="w-full h-auto object-cover aspect-[4/3] sm:aspect-[16/9]" alt="Game background" src="<%= game.background_image && game.background_image !== 'null' && game.background_image !== 'undefined' ? game.background_image : '/images/sword.png' %>" onerror="this.onerror=null;this.src='/images/sword.png';" />
+
+          <!-- Add to Collection Button (On Image) -->
+          <div class="absolute bottom-5 right-5">
+            <button id="add_to_collection_btn" class="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg font-semibold text-sm sm:text-base transition-all duration-300 hover:scale-105 active:scale-95 shadow-xl bg-emerald-600/90 backdrop-blur-md hover:bg-emerald-500 text-white border border-white/20">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              <span class="hidden sm:inline">Voeg toe aan collectie</span>
+              <span class="sm:hidden">Toevoegen</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div
+          id="description_container"
+          class="backdrop-blur-md p-6 sm:p-8 rounded-3xl border shadow-xl max-h-[32vh] lg:max-h-[22rem] overflow-y-auto max-w-none leading-relaxed text-base sm:text-lg self-start <%= themaName === 'light' ? 'bg-white/85 text-slate-800 border-emerald-200/70 shadow-emerald-200/30 prose prose-emerald prose-headings:text-emerald-500 prose-a:text-emerald-600 hover:prose-a:text-emerald-500' : 'bg-slate-900/50 text-slate-100 border-emerald-500/40 shadow-black/40 prose prose-invert prose-emerald prose-headings:text-emerald-300 prose-a:text-emerald-400 hover:prose-a:text-emerald-300' %>"
+        ><%= game.description_raw %>
+        </div>
+      </div>
+
+      <!-- Game Info Stats -->
+      <div class="flex flex-wrap justify-center gap-6 sm:gap-8 px-4">
+        <div id="game_rating" class="backdrop-blur-sm font-semibold text-base sm:text-lg px-6 py-3 rounded-xl shadow-lg text-center transition-all duration-300 hover:bg-emerald-600/30 <%= themaName === 'light' ? 'bg-white/85 text-slate-800 border border-slate-200 shadow-slate-200/40 hover:bg-white' : 'bg-emerald-600/20 text-white border border-emerald-500/20' %>"><%=game.rating %></div>
+
+        <div id="game_release" class="backdrop-blur-sm font-semibold text-base sm:text-lg px-6 py-3 rounded-xl shadow-lg text-center transition-all duration-300 hover:bg-emerald-600/30 <%= themaName === 'light' ? 'bg-white/85 text-slate-800 border border-slate-200 shadow-slate-200/40 hover:bg-white' : 'bg-emerald-600/20 text-white border border-emerald-500/20' %>">Uitgebracht <%= game.released %></div>
+
+        <div id="game_genre" class="flex backdrop-blur-sm font-semibold text-base sm:text-lg px-6 py-3 rounded-xl shadow-lg text-center transition-all duration-300 hover:bg-emerald-600/30 <%= themaName === 'light' ? 'bg-white/85 text-slate-800 border border-slate-200 shadow-slate-200/40 hover:bg-white' : 'bg-emerald-600/20 text-white border border-emerald-500/20' %>">
+          <%for(let genre of game.genres ){%>
+          <p><%= genre.name%></p>&nbsp;
+          <%}%>
+        
+        </div>
+        </div>
+
+      <!-- Reviews Section -->
+      <div id="review_container" class="backdrop-blur-md rounded-3xl border shadow-xl p-6 sm:p-8 mt-8 <%= themaName === 'light' ? 'bg-white/85 border-emerald-200/70 shadow-emerald-200/30' : 'bg-slate-900/50 border-emerald-500/40 shadow-black/40' %>">
+        <div class="flex items-center justify-between mb-6 pb-4 border-b <%= themaName === 'light' ? 'border-emerald-200/60' : 'border-emerald-500/30' %>">
+          <h3 class="text-2xl sm:text-3xl font-bold text-emerald-400 flex items-center gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+            </svg>
+            Reviews van Spelers
+          </h3>
+          <span id="review_count" class="text-emerald-400 font-semibold text-sm sm:text-base px-4 py-2 rounded-full <%= themaName === 'light' ? 'bg-emerald-500/15' : 'bg-emerald-500/10' %>"><%= reviewCount%></span>
+        </div>
+       <div id="reviews_list" class="grid gap-6">
+
+  <% for(let user of allUsers){ %>
+    <% for(let userrv of user.reviews) { %>
+
+      <% if(userrv.gameId === gameId) { %>
+
+        <div class="rounded-2xl p-5 shadow-lg transition <%= themaName === 'light' ? 'bg-white border border-emerald-200 shadow-emerald-200/40' : 'bg-gradient-to-br from-emerald-950/70 to-slate-950 border border-emerald-500/25 shadow-black/50 hover:shadow-emerald-500/10' %>">
+
+          <!-- User Info -->
+          <div class="flex items-center gap-4 mb-4">
+
+            <% if(!user.profile_picture){ %>
+              <img src="/images/user.png"
+                   class="w-12 h-12 rounded-full object-cover border-2 border-emerald-400/40"
+                   alt="<%= user.username %>">
+            <% } else { %>
+              <img src="<%= user.profile_picture %>"
+                   class="w-12 h-12 rounded-full object-cover border-2 border-emerald-400/40"
+                   alt="<%= user.username %>">
+            <% } %>
+
+            <div>
+              <p class="font-semibold text-white text-lg">
+                <%= user.username %>
+              </p>
+              <p class="text-sm text-emerald-300">
+                Review geplaatst
+              </p>
+            </div>
+
+          </div>
+
+          <!-- Review Content -->
+          <div class="rounded-xl p-4 border mb-4 <%= themaName === 'light' ? 'bg-emerald-50 border-emerald-200' : 'bg-emerald-950/50 border-emerald-700/40' %>">
+            <p class="leading-relaxed <%= themaName === 'light' ? 'text-slate-700' : 'text-gray-200' %>">
+              <%= userrv.review %>
+            </p>
+          </div>
+
+          <!-- Rating -->
+          <div class="flex items-center justify-between">
+
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-400">Score:</span>
+              <span class="text-xl font-bold text-emerald-400">
+                <%= userrv.rating %>
+              </span>
+              <span class="text-gray-500">/100</span>
+            </div>
+
+            <!-- Visual bar -->
+            <div class="w-32 h-2 rounded-full overflow-hidden <%= themaName === 'light' ? 'bg-emerald-200' : 'bg-emerald-900/70' %>">
+              <div class="h-full bg-gradient-to-r from-emerald-400 to-green-500" style="width:50px ;">
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      <% } %>
+
+    <% } %>
+  <% } %>
+
+</div>
+        <!--
+        
+        <div id="no_reviews" class="text-center py-12 hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto text-zinc-600 mb-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375m-13.5 3.01c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.184-4.183a1.14 1.14 0 0 1 .778-.332 48.294 48.294 0 0 0 5.83-.498c1.585-.233 2.708-1.626 2.708-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z" />
+          </svg>
+          <p class="text-zinc-500 text-lg font-medium">
+            Nog geen reviews voor dit spel
+          </p>
+          <p class="text-zinc-600 text-sm mt-2">
+            Wees de eerste om je ervaring te delen!
+          </p>
+        </div>
+        
+        -->
+
+        <!-- Write Review Button (Inside Reviews Section) -->
+        <div class="mt-6 pt-6 border-t border-emerald-500/20 flex justify-center">
+          <button id="review_btn" type="button" class="flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 active:scale-95 shadow-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-500 hover:to-emerald-600 text-white border-2 border-emerald-400/30">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+            </svg>
+            Schrijf jouw review
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Form Modal -->
+    <div id="review_menu"
+  class="fixed inset-0 z-50 hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+
+  <!-- Overlay (clickable to close, but NOT blocking form) -->
+  <div id="review_overlay"
+    class="absolute inset-0 bg-black/70 backdrop-blur-sm">
+  </div>
+
+  <!-- Modal -->
+  <div
+    class="relative z-10 w-full max-w-2xl rounded-2xl border shadow-2xl <%= themaName === 'light' ? 'bg-white border-slate-200' : 'bg-zinc-900 border-zinc-700' %>">
+
+    <form id="review_form" class="p-8 space-y-6 <%= themaName === 'light' ? 'text-slate-900' : 'text-white' %>" method="post">
+
+      <!-- Close -->
+      <button type="button" id="btn_close_review_menu"
+        class="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center <%= themaName === 'light' ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'bg-zinc-800 text-zinc-200 hover:bg-emerald-600 hover:text-white' %> transition">
+        ✕
+      </button>
+
+      <!-- Title -->
+      <h2 class="text-3xl font-bold text-center text-emerald-400">
+        Deel jouw ervaring
+      </h2>
+
+      <!-- TEXTAREA (FIXED) -->
+      <div>
+        <label class="block mb-2 <%= themaName === 'light' ? 'text-slate-700' : 'text-emerald-300' %>">Jouw review</label>
+        <textarea id="text_review" rows="5" name="reviewtxt"
+          class="w-full p-4 rounded-xl border focus:border-emerald-400 focus:outline-none <%= themaName === 'light' ? 'bg-slate-50 text-slate-900 border-slate-300 placeholder-slate-400' : 'bg-zinc-800 text-white border-zinc-700 placeholder-zinc-500' %>"
+          placeholder="Typ hier..."></textarea>
+      </div>
+
+      <!-- RANGE (FIXED) -->
+      <div>
+        <label class="block mb-2 <%= themaName === 'light' ? 'text-slate-700' : 'text-emerald-300' %>">Score</label>
+
+        <input id="rating_range" type="range" min="0" max="100" value="75"
+          class="w-full cursor-pointer" />
+
+        <p class="mt-2 text-center font-bold text-xl <%= themaName === 'light' ? 'text-slate-700' : 'text-emerald-300' %>">
+          <span><input id="rating_value" name="reviewrating" type="text" class="w-24 rounded-lg border text-center <%= themaName === 'light' ? 'bg-slate-50 text-slate-900 border-slate-300' : 'bg-zinc-800 text-white border-zinc-700' %>"></span> / 100
+        </p>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" name="submitbtn" value="clicked"
+        class="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-500 to-emerald-600 hover:scale-[1.02] transition">
+        Schrijf review
+      </button>
+
+    </form>
+  </div>
+</div>
+  </main>
+
+  <!-- Collection Modal -->
+  <div id="addToCollectionMenu" style="
+        display: none;
+        position: fixed;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(15, 23, 42, 0.95);
+        padding: 2rem 2rem 2.5rem 2rem;
+        border-radius: 1.5rem;
+        border: 2px solid #10b981;
+        z-index: 1000;
+        min-width: 320px;
+        max-width: 500px;
+        width: 90vw;
+        max-height: 80vh;
+        overflow-y: auto;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.5);
+      ">
+    <button id="delete_collection_btn" style="
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: transparent;
+          border: none;
+          color: #f87171;
+          font-size: 1.5rem;
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s;
+          border-radius: 0.5rem;
+        "
+        onmouseover="this.style.backgroundColor='rgba(244, 63, 94, 0.1)'"
+        onmouseout="this.style.backgroundColor='transparent'">
+      &times;
+    </button>
+
+    <h3 style="
+          color: #10b981;
+          margin-bottom: 1.5rem;
+          font-size: 1.3rem;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        ">
+      Voeg toe aan Collectie
+    </h3>
+
+    <div id="allCollectionsNames" style="margin-bottom: 1.5rem; display: none; width: 100%; box-sizing: border-box; min-width: 0;"></div>
+
+    <div id="loading_collections" style="text-align: center; color: #94a3b8; margin-bottom: 1rem; display: none; width: 100%; box-sizing: border-box;">
+      <p>Collecties laden...</p>
+    </div>
+
+    <button id="create_collection_btn" style="
+          width: 100%;
+          padding: 0.875rem;
+          background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+          color: white;
+          border: none;
+          border-radius: 0.75rem;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          margin-top: 0.75rem;
+          font-size: 0.95rem;
+          letter-spacing: 0.5px;
+          box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        "
+        onmouseover="this.style.boxShadow='0 6px 16px rgba(16, 185, 129, 0.4)'; this.style.transform='translateY(-2px)'"
+        onmouseout="this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.3)'; this.style.transform='translateY(0)'">
+      + Nieuwe Collectie
+    </button>
+  </div>
+
+  <!-- Create Collection Modal (Nested) -->
+  <div id="createCollectionModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 2rem; border-radius: 1.5rem; border: 2px solid #059669; z-index: 1001; min-width: 300px; max-width: 420px; width: 85vw; backdrop-filter: blur(12px);" class="<%= themaName === 'light' ? 'bg-slate-50 shadow-lg shadow-slate-200/40' : 'bg-slate-900 shadow-lg shadow-black/60' %>">
+    <button id="btn_close_create_modal" style="
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          background: transparent;
+          border: none;
+          color: #f87171;
+          font-size: 1.5rem;
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s;
+          border-radius: 0.5rem;
+        "
+        onmouseover="this.style.backgroundColor='rgba(244, 63, 94, 0.1)'"
+        onmouseout="this.style.backgroundColor='transparent'">
+      &times;
+    </button>
+
+    <h3 style="
+          color: #10b981;
+          margin: 0 0 1.5rem 0;
+          font-size: 1.2rem;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        ">
+      📝 Nieuwe Collectie
+    </h3>
+
+    <input type="text" id="new_collection_name" placeholder="Collectie naam..." style="
+          width: 100%;
+          padding: 0.875rem;
+          border: 2px solid #10b981;
+          border-radius: 0.75rem;
+          font-size: 0.95rem;
+          transition: all 0.3s ease;
+          box-sizing: border-box;
+          margin-bottom: 1rem;
+        " class="<%= themaName === 'light' ? 'bg-slate-100 text-slate-900' : 'bg-slate-800 text-white' %>"
+        onfocus="this.style.borderColor='#059669'; this.style.boxShadow='0 0 0 3px rgba(16, 185, 129, 0.1)'"
+        onblur="this.style.borderColor='#10b981'; this.style.boxShadow='none'" />
+
+    <button id="btn_submit_create_collection" style="
+          width: 100%;
+          padding: 0.875rem;
+          background: linear-gradient(135deg, #059669 0%, #047857 100%);
+          color: white;
+          border: none;
+          border-radius: 0.75rem;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          font-size: 0.95rem;
+          box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+        "
+        onmouseover="this.style.boxShadow='0 6px 16px rgba(5, 150, 105, 0.4)'; this.style.transform='translateY(-2px)'"
+        onmouseout="this.style.boxShadow='0 4px 12px rgba(5, 150, 105, 0.3)'; this.style.transform='translateY(0)'">
+      Maak aan & Voeg toe
+    </button>
+  </div>
+
+  <!-- Modal backdrop -->
+  <div id="modal_backdrop" style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+      "></div>
+<%- include('partials/footer') %>
+
+
+          <script>
+            const review_btn = document.querySelector("#review_btn");
+            const reviwe_menu = document.querySelector("#review_menu");
+            const range = document.getElementById("rating_range");
+            const output = document.getElementById("rating_value");
+            const btn_close_review_menu = document.querySelector("#btn_close_review_menu");
+
+
+
+            output.value = "75"
+
+            review_btn.addEventListener("click", () => {
+              reviwe_menu.classList.remove("hidden");
+              reviwe_menu.classList.remove("opacity-0");
+              reviwe_menu.classList.add("flex");
+              reviwe_menu.classList.add("opacity-1");
+            });
+
+            range.addEventListener("input", () => {
+              output.value = range.value;
+            });
+
+            btn_close_review_menu.addEventListener("click", () => {
+              reviwe_menu.classList.remove("flex");
+              reviwe_menu.classList.remove("opacity-1");
+              reviwe_menu.classList.add("hidden");
+              reviwe_menu.classList.add("opacity-0");
+
+            });
+          </script>

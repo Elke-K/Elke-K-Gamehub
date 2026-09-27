@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/js/profile.js" defer></script>
+  <script src="/js/utils.js" defer></script>
+</head>
+
+<body class="games-body min-h-screen profile-page <%= themaName === 'light' ? 'theme-light' : 'theme-dark' %>">
+  <header class="games-header">
+    <div class="flex flex-col items-center gap-6 lg:grid lg:grid-cols-[10%_80%_10%] lg:items-center lg:gap-0">
+      <a href="/home" class="animate-fade-in stagger-1">
+        <div id="logo" class="text-emerald-400 text-xl md:text-2xl font-bold tracking-wide px-3 py-1.5 rounded-lg transition-all duration-300 hover:text-emerald-300 hover:bg-emerald-950/50 hover:scale-110 hover:shadow-lg hover:shadow-emerald-500/50 hover:-rotate-2">
+          [+..••]
+        </div>
+      </a>
+
+      <%- include('partials/navbar') %>
+
+      <%- include('partials/header-user') %>
+    </div>
+  </header>
+  <main class="animate-fade-in stagger-4 profile-main">
+    <div class="max-w-7xl mx-auto px-4 py-6 lg:py-8 profile-shell">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 profile-grid">
+        <!-- Left Column - Profile Info & Settings -->
+        <div class="lg:col-span-2 space-y-6 order-2 lg:order-none">
+          <!-- Profile Header Card -->
+          <div class="profile-card <%= themaName === 'light' ? 'bg-white border-emerald-200' : 'bg-zinc-900 border-emerald-500' %> border-2 rounded-2xl p-6 shadow-xl">
+            <div class="flex flex-col items-center">
+              <div class="relative mb-4">
+                <div class="profile-avatar w-24 h-24 bg-linear-to-br from-emerald-400 to-emerald-600 p-1 rounded-full shadow-lg shadow-emerald-500/30 overflow-hidden">
+                  <% const profileImage = imageSrc && imageSrc.trim() !== "" ? imageSrc : "/images/user.png"; %>
+                  <img src="<%=profileImage%>" alt="gebruikers profiel foto" id="profile_pic" class="block w-full h-full rounded-full object-cover object-center bg-zinc-800" />
+              </div>
+              <div
+                class="absolute -bottom-1 -right-1 bg-emerald-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-lg"
+                id="level"
+              >
+                Lvl <%=lvl%>
+                </div>
+              </div>
+              <h2 id="user-username" class="text-2xl font-bold mb-4">
+                <%=username%>
+              </h2>
+
+              <label class="cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-500/20">
+                Verander profiel foto
+                <input type="file" class="sr-only" id="change_pic" />
+              </label>
+            </div>
+          </div>
+
+          <% if (locals.notification && notification !== "") { %>
+            <div id="notification_active" class="hidden"><%=notification%></div>
+          <% } %>
+
+          <form method="post" id="save_changes" class="profile-card <%= themaName === 'light' ? 'bg-white border-slate-200' : 'bg-zinc-900 border-zinc-800' %> border-2 rounded-2xl p-6 shadow-xl space-y-6">
+            <h3 class="text-xl font-bold text-emerald-400 mb-4">
+              Profiel instellingen
+            </h3>
+
+            <div class="flex gap-3">
+              <p>Profiel publiek maken?</p>
+
+              <input type="checkbox" name="public" <%= publicProfile ? 'checked' : '' %> onchange="this.form.submit()">
+            </div>
+
+            <% if (publicProfile) { %>
+            <a href="/public-profile/<%=username%>" id="public-profile-link" class="underline text-emerald-400">Ga naar publieke profiel</a>
+            <br />
+            <button id="share-profile" class="cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white px-2 py-1 rounded-lg font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-emerald-500/20">
+              Deel publieke profiel
+            </button>
+            <% } %>
+
+            <div class="space-y-2">
+              <label for="about" class="block text-sm font-semibold <%= themaName === 'light' ? 'text-slate-600' : 'text-zinc-300' %>">Over mij</label>
+              <textarea name="about" id="about" rows="6" class="w-full px-4 py-3 rounded-lg text-sm border-2 hover:border-emerald-500 focus:border-emerald-500 focus:outline-none transition-all duration-300 resize-none <%= themaName === 'light' ? 'bg-white text-slate-900 border-slate-300' : 'bg-zinc-800 text-white border-zinc-700' %>" placeholder="Vertel ons over jezelf..."><%=aboutMe%></textarea>
+            </div>
+
+            <div class="space-y-2">
+              <label for="email" class="block text-sm font-semibold <%= themaName === 'light' ? 'text-slate-600' : 'text-zinc-300' %>">E-mail adres</label>
+              <input type="email" name="email" id="email" class="w-full px-4 py-3 rounded-lg text-sm border-2 hover:border-emerald-500 focus:border-emerald-500 focus:outline-none transition-all duration-300 <%= themaName === 'light' ? 'bg-white text-slate-900 border-slate-300' : 'bg-zinc-800 text-white border-zinc-700' %>" placeholder="your.email@example.com" value='<%=email%>' required />
+            </div>
+
+            <div class="space-y-2">
+              <label for="username" class="block text-sm font-semibold <%= themaName === 'light' ? 'text-slate-600' : 'text-zinc-300' %>">Gebruikersnaam</label>
+              <input type="text" name="username" id="username" class="w-full px-4 py-3 rounded-lg text-sm border-2 hover:border-emerald-500 focus:border-emerald-500 focus:outline-none transition-all duration-300 <%= themaName === 'light' ? 'bg-white text-slate-900 border-slate-300' : 'bg-zinc-800 text-white border-zinc-700' %>" placeholder="Kies een gebruikersnaam" value='<%=username%>' required />
+            </div>
+
+            <div class="pt-2">
+              <a href="/reset-password" class="text-emerald-400 hover:text-emerald-300 text-sm font-medium underline transition-colors">
+                Wachtwoord vergeten?
+              </a>
+            </div>
+
+            <div class="flex gap-3 pt-4 profile-actions">
+              <button type="submit" class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-emerald-500/20">
+                Sla veranderingen op
+              </button>
+              <a href="/logout" id="logout" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-red-500/20">
+                Uitloggen
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Right Column - Collections -->
+        <div class="lg:col-span-1 flex flex-col gap-3 order-1 lg:order-none">
+          <div class="flex items-center justify-between gap-3">
+            <h2 id="collections_section_title" class="text-2xl md:text-3xl font-bold text-emerald-400">
+              Collecties
+            </h2>
+            <button type="button" id="toggle_collections" class="lg:hidden games-btn games-btn-ghost px-3 py-1.5 text-xs">
+              Verberg
+            </button>
+          </div>
+          <div id="collectioncontainer" class="profile-collections flex flex-col gap-4 p-4 rounded-2xl shadow-xl w-full max-h-80 overflow-y-auto">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+<!-- Collection Modal Backdrop -->
+<div id="collection_modal_backdrop" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+
+  <div id="collection_modal" class="<%= themaName === 'light' ? 'bg-white border-slate-300' : 'bg-zinc-900 border-zinc-700' %> 
+      w-full max-w-lg md:max-w-xl rounded-3xl border-2 shadow-2xl overflow-hidden">
+
+    <div class="flex items-center justify-between border-b <%= themaName === 'light' ? 'border-slate-200' : 'border-zinc-700' %> px-6 py-4">
+
+      <h3 class="text-xl font-bold text-emerald-400">
+
+        Collectie
+      </h3>
+
+      <button id="btn_close_modal" class="btn_delete_collection flex items-center justify-center w-8 h-8 rounded-full bg-zinc-700 text-red-400 text-lg font-bold hover:bg-red-500 hover:text-white transition-all duration-200 shadow-sm">
+        ✕
+      </button>
+    </div>
+
+    <div class="p-6 flex flex-wrap gap-4" id="modal_body">
+
+    </div>
+
+  </div>
+</div>
+
+  <%- include('partials/footer') %>

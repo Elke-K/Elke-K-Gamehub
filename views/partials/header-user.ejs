@@ -1,0 +1,33 @@
+<div class="header-user animate-fade-in stagger-8 grid gap-5 justify-items-center text-center lg:flex lg:items-center">
+  <div id="user_info" class="text-sm">
+    <a href="/profile">
+      <div id="currently_game" class="text-zinc-500">
+        Speelt momenteel:
+      </div>
+    </a>
+    <a>
+      <div id="current_game" class="<%= themaName === 'light' ? 'text-slate-900' : 'text-emerald-400' %> font-semibold">
+        <% if (typeof currently_playing === 'undefined' || typeof currently_playing_id === 'undefined') { %>
+          Geen game
+        <% } else { %>
+          <a href="/game-info/<%=currently_playing_id%>"><%=currently_playing%></a>
+        <% } %>
+      </div>
+    </a>
+  </div>
+  <a href="/profile">
+    <div class="w-8 h-8 md:w-10 md:h-10 bg-emerald-500 rounded-full flex items-center justify-center hover:bg-emerald-400 transition-all duration-300 hover:scale-110 shadow-lg shadow-emerald-500/20">
+      <% if (locals.user && locals.user.profile_picture) { %>
+      <img id="user_avatar" src="<%=user.profile_picture%>" alt="" class="w-full h-full rounded-full bg-zinc-800 p-2" />
+
+<% } else {%>
+    <img id="user_avatar" src="../images/user.png" alt="" class="w-full h-full rounded-full bg-zinc-800 p-2" />
+
+  <%}%>
+
+    </div>
+    <% if (locals.user && locals.user.username) { %>
+      <span class="header-username"><%= user.username %></span>
+    <% } %>
+  </a>
+</div>
